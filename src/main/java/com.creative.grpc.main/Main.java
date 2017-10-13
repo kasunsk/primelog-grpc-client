@@ -1,14 +1,16 @@
 package com.creative.grpc.main;
 
-import com.creative.grpc.config.Channel;
 import com.creative.grpc.config.GRpcServerProperties;
+import com.creative.grpc.observer.ResponseObserver;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.examples.CalculatorGrpc;
 import io.grpc.examples.CalculatorOuterClass;
 import io.grpc.inprocess.InProcessChannelBuilder;
+import io.grpc.stub.StreamObserver;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 class Main {
 
@@ -18,10 +20,11 @@ class Main {
     public static void main(String [] args) {
 
         init();
-        callCallculateService();
+        callCalculateService();
+        //calculate();
     }
 
-    private static void callCallculateService()  {
+    private static void callCalculateService()  {
 
         final CalculatorGrpc.CalculatorFutureStub calculatorFutureStub = CalculatorGrpc.newFutureStub(Optional.ofNullable(channel).orElse(inProcChannel));
         final CalculatorOuterClass.CalculatorRequest request = CalculatorOuterClass.CalculatorRequest.newBuilder().setNumber1(20).setNumber2(15)
@@ -34,6 +37,7 @@ class Main {
         } catch (Exception ex) {
             System.out.println("Error" + ex);
         }
+        System.out.println("Something else happening");
     }
 
     private static void init() {
@@ -60,6 +64,44 @@ class Main {
 
     protected static InProcessChannelBuilder onChannelBuild(InProcessChannelBuilder channelBuilder){
         return  channelBuilder;
+    }
+
+    public void shutdown() throws InterruptedException {
+        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+    }
+
+    private static void calculate() {
+
+        CalculatorGrpc.CalculatorStub asyncStub = CalculatorGrpc.newStub(Optional.ofNullable(channel)
+                .orElse(inProcChannel));
+
+        StreamObserver<CalculatorOuterClass.CalculatorResponse> responseObserver = new StreamObserver<CalculatorOuterClass
+                .CalculatorResponse>() {
+
+            @Override
+            public void onNext(CalculatorOuterClass.CalculatorResponse value) {
+                System.out.println("Response Observer : onNext");
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                System.out.println("Response Observer : Error");
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("Response Observer : completed");
+            }
+        };
+
+        final CalculatorOuterClass.CalculatorRequest request = CalculatorOuterClass.CalculatorRequest.newBuilder().setNumber1(30)
+                .setNumber2(15).setOperation(CalculatorOuterClass.CalculatorRequest.OperationType.SUBTRACT).build();
+
+
+
+        asyncStub.calculate(request, responseObserver);
+
+        System.out.println("Something else happening");
     }
 
 }

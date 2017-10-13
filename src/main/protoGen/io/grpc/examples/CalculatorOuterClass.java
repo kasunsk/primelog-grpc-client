@@ -1177,7 +1177,7 @@ public final class CalculatorOuterClass {
       "ionType\"@\n\rOperationType\022\007\n\003ADD\020\000\022\014\n\010SUB" +
       "TRACT\020\001\022\014\n\010MULTIPLY\020\002\022\n\n\006DIVIDE\020\003\"$\n\022Cal" +
       "culatorResponse\022\016\n\006result\030\001 \001(\0012D\n\nCalcu" +
-      "lator\0226\n\tCalculate\022\022.CalculatorRequest\032\023" +
+      "lator\0226\n\tcalculate\022\022.CalculatorRequest\032\023" +
       ".CalculatorResponse\"\000B\022\n\020io.grpc.example" +
       "sb\006proto3"
     };

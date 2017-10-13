@@ -33,7 +33,7 @@ public final class CalculatorGrpc {
       io.grpc.MethodDescriptor.<io.grpc.examples.CalculatorOuterClass.CalculatorRequest, io.grpc.examples.CalculatorOuterClass.CalculatorResponse>newBuilder()
           .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
           .setFullMethodName(generateFullMethodName(
-              "Calculator", "Calculate"))
+              "Calculator", "calculate"))
           .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
               io.grpc.examples.CalculatorOuterClass.CalculatorRequest.getDefaultInstance()))
           .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
