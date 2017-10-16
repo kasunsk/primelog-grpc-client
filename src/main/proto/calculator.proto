@@ -22,6 +22,6 @@ message CalculatorResponse {
 
 
 service Calculator {
-  rpc calculate(CalculatorRequest) returns (CalculatorResponse) {}
+  rpc calculate(stream CalculatorRequest) returns (CalculatorResponse) {}
 }
 

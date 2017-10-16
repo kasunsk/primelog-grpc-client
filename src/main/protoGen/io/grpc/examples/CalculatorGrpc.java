@@ -31,7 +31,7 @@ public final class CalculatorGrpc {
   public static final io.grpc.MethodDescriptor<io.grpc.examples.CalculatorOuterClass.CalculatorRequest,
       io.grpc.examples.CalculatorOuterClass.CalculatorResponse> METHOD_CALCULATE =
       io.grpc.MethodDescriptor.<io.grpc.examples.CalculatorOuterClass.CalculatorRequest, io.grpc.examples.CalculatorOuterClass.CalculatorResponse>newBuilder()
-          .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
+          .setType(io.grpc.MethodDescriptor.MethodType.CLIENT_STREAMING)
           .setFullMethodName(generateFullMethodName(
               "Calculator", "calculate"))
           .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
@@ -69,16 +69,16 @@ public final class CalculatorGrpc {
 
     /**
      */
-    public void calculate(io.grpc.examples.CalculatorOuterClass.CalculatorRequest request,
+    public io.grpc.stub.StreamObserver<io.grpc.examples.CalculatorOuterClass.CalculatorRequest> calculate(
         io.grpc.stub.StreamObserver<io.grpc.examples.CalculatorOuterClass.CalculatorResponse> responseObserver) {
-      asyncUnimplementedUnaryCall(METHOD_CALCULATE, responseObserver);
+      return asyncUnimplementedStreamingCall(METHOD_CALCULATE, responseObserver);
     }
 
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
       return io.grpc.ServerServiceDefinition.builder(getServiceDescriptor())
           .addMethod(
             METHOD_CALCULATE,
-            asyncUnaryCall(
+            asyncClientStreamingCall(
               new MethodHandlers<
                 io.grpc.examples.CalculatorOuterClass.CalculatorRequest,
                 io.grpc.examples.CalculatorOuterClass.CalculatorResponse>(
@@ -107,10 +107,10 @@ public final class CalculatorGrpc {
 
     /**
      */
-    public void calculate(io.grpc.examples.CalculatorOuterClass.CalculatorRequest request,
+    public io.grpc.stub.StreamObserver<io.grpc.examples.CalculatorOuterClass.CalculatorRequest> calculate(
         io.grpc.stub.StreamObserver<io.grpc.examples.CalculatorOuterClass.CalculatorResponse> responseObserver) {
-      asyncUnaryCall(
-          getChannel().newCall(METHOD_CALCULATE, getCallOptions()), request, responseObserver);
+      return asyncClientStreamingCall(
+          getChannel().newCall(METHOD_CALCULATE, getCallOptions()), responseObserver);
     }
   }
 
@@ -131,13 +131,6 @@ public final class CalculatorGrpc {
         io.grpc.CallOptions callOptions) {
       return new CalculatorBlockingStub(channel, callOptions);
     }
-
-    /**
-     */
-    public io.grpc.examples.CalculatorOuterClass.CalculatorResponse calculate(io.grpc.examples.CalculatorOuterClass.CalculatorRequest request) {
-      return blockingUnaryCall(
-          getChannel(), METHOD_CALCULATE, getCallOptions(), request);
-    }
   }
 
   /**
@@ -156,14 +149,6 @@ public final class CalculatorGrpc {
     protected CalculatorFutureStub build(io.grpc.Channel channel,
         io.grpc.CallOptions callOptions) {
       return new CalculatorFutureStub(channel, callOptions);
-    }
-
-    /**
-     */
-    public com.google.common.util.concurrent.ListenableFuture<io.grpc.examples.CalculatorOuterClass.CalculatorResponse> calculate(
-        io.grpc.examples.CalculatorOuterClass.CalculatorRequest request) {
-      return futureUnaryCall(
-          getChannel().newCall(METHOD_CALCULATE, getCallOptions()), request);
     }
   }
 
@@ -186,10 +171,6 @@ public final class CalculatorGrpc {
     @java.lang.SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_CALCULATE:
-          serviceImpl.calculate((io.grpc.examples.CalculatorOuterClass.CalculatorRequest) request,
-              (io.grpc.stub.StreamObserver<io.grpc.examples.CalculatorOuterClass.CalculatorResponse>) responseObserver);
-          break;
         default:
           throw new AssertionError();
       }
@@ -200,6 +181,9 @@ public final class CalculatorGrpc {
     public io.grpc.stub.StreamObserver<Req> invoke(
         io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
+        case METHODID_CALCULATE:
+          return (io.grpc.stub.StreamObserver<Req>) serviceImpl.calculate(
+              (io.grpc.stub.StreamObserver<io.grpc.examples.CalculatorOuterClass.CalculatorResponse>) responseObserver);
         default:
           throw new AssertionError();
       }
