@@ -90,12 +90,12 @@ class Main {
 
             @Override
             public void onNext(CalculatorResponse value) {
-                System.out.println("Result is" +  value.getResult());
+                System.out.println("Result is " +  value.getResult());
             }
 
             @Override
             public void onError(Throwable t) {
-                System.out.println("Response Observer : Error");
+                System.out.println("Response Observer : Error" + t);
                 finishLatch.countDown();
             }
 
@@ -112,20 +112,32 @@ class Main {
         StreamObserver<CalculatorRequest> requestObserver = asyncStub.calculate(responseObserver);
 
         try {
-            System.out.println("Processing");
+            System.out.println("Processing ");
+           /* for (int i = 0; i < 15; i++) {
+                System.out.print(".");
+                Thread.sleep(1000);
+            }
+            System.out.println();*/
             requestObserver.onNext(request);
-            Thread.sleep(random.nextInt(1000) + 500);
-            if (finishLatch.getCount() == 0) {
+            /*Thread.sle
+            ep(random.nextInt(1000) + 500);*/
+            //if (finishLatch.getCount() == 0) {
                 // RPC completed or errored before we finished sending.
                 // Sending further requests won't error, but they will just be thrown away.
-                return;
-            }
+                //return;
+            //}
+            System.out.println("continue ....");
+
+            requestObserver.onCompleted();
+
+            Thread.sleep(20000);
+            System.out.println("continue again....");
         } catch (RuntimeException e) {
             requestObserver.onError(e);
             throw e;
         }
 
-        requestObserver.onCompleted();
+
 
         // Receiving happens asynchronously
         if (!finishLatch.await(1, TimeUnit.MINUTES)) {
