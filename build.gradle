@@ -12,7 +12,7 @@ repositories {
 }
 
 jar {
-    manifest.attributes("Main-Class": "com.creative.grpc.main.Main")
+    manifest.attributes("Main-Class": "com.creative.primelog.client.run.InvoiceGenerator")
 }
 
 buildscript {
@@ -46,7 +46,7 @@ dependencies {
 sourceSets {
     main {
         java {
-            srcDir 'src/main/protoGen'
+            srcDir 'src/run/protoGen'
         }
     }
 }
@@ -62,7 +62,7 @@ protobuf {
     }
 
     generateProtoTasks {
-        ofSourceSet('main').each { task ->
+        ofSourceSet('run').each { task ->
             task.builtins {
                 java{
                     outputSubDir = 'protoGen'
@@ -80,7 +80,7 @@ protobuf {
 
 task cleanProtoGen{
     doFirst{
-        delete("$projectDir/src/main/protoGen")
+        delete("$projectDir/src/run/protoGen")
     }
 }
 clean.dependsOn cleanProtoGen

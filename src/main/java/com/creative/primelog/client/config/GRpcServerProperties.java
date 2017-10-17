@@ -1,4 +1,4 @@
-package com.creative.grpc.config;
+package com.creative.primelog.client.config;
 
 public class GRpcServerProperties {
 

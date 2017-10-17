@@ -1,12 +1,13 @@
-package com.creative.grpc.main;
+package com.creative.primelog.client.run;
 
-import com.creative.grpc.config.GRpcServerProperties;
+import com.creative.primelog.client.config.GRpcServerProperties;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.examples.CalculatorGrpc;
-import io.grpc.examples.CalculatorGrpc.*;
-import io.grpc.examples.CalculatorOuterClass.CalculatorResponse;
+import io.grpc.examples.CalculatorGrpc.CalculatorFutureStub;
+import io.grpc.examples.CalculatorGrpc.CalculatorStub;
 import io.grpc.examples.CalculatorOuterClass.CalculatorRequest;
+import io.grpc.examples.CalculatorOuterClass.CalculatorResponse;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
@@ -15,7 +16,7 @@ import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-class Main {
+class Calculator {
 
     static Random random = new Random();
 
@@ -26,22 +27,22 @@ class Main {
     public static void main(String [] args) {
 
         init();
-        //callCalculateService();
-        try {
-            calculate();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        callCalculateService();
+//        try {
+//            calculate();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
     }
 
     private static void callCalculateService()  {
 
-        final CalculatorGrpc.CalculatorFutureStub calculatorFutureStub = CalculatorGrpc.newFutureStub(Optional.ofNullable(channel).orElse(inProcChannel));
+        final CalculatorFutureStub calculatorFutureStub = CalculatorGrpc.newFutureStub(Optional.ofNullable(channel).orElse(inProcChannel));
         final CalculatorRequest request = CalculatorRequest.newBuilder().setNumber1(20).setNumber2(15)
                 .setOperation(CalculatorRequest.OperationType.SUBTRACT).build();
 
         try {
-            //final Double answer = calculatorFutureStub.calculate(request).get().getResult();
+           // final Double answer = calculatorFutureStub.calculate(request).get().getResult();
             System.out.println("Congratulation!!! It Works.");
            // System.out.println("Answer is : " + answer);
         } catch (Exception ex) {
@@ -113,19 +114,7 @@ class Main {
 
         try {
             System.out.println("Processing ");
-           /* for (int i = 0; i < 15; i++) {
-                System.out.print(".");
-                Thread.sleep(1000);
-            }
-            System.out.println();*/
             requestObserver.onNext(request);
-            /*Thread.sle
-            ep(random.nextInt(1000) + 500);*/
-            //if (finishLatch.getCount() == 0) {
-                // RPC completed or errored before we finished sending.
-                // Sending further requests won't error, but they will just be thrown away.
-                //return;
-            //}
             System.out.println("continue ....");
 
             requestObserver.onCompleted();

@@ -1,4 +1,4 @@
-package com.creative.grpc.observer;
+package com.creative.primelog.client.observer;
 
 import io.grpc.examples.CalculatorGrpc;
 import io.grpc.examples.CalculatorOuterClass;
