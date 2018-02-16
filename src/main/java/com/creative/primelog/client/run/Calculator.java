@@ -6,6 +6,7 @@ import io.grpc.ManagedChannelBuilder;
 import io.grpc.examples.CalculatorGrpc;
 import io.grpc.examples.CalculatorGrpc.CalculatorFutureStub;
 import io.grpc.examples.CalculatorGrpc.CalculatorStub;
+import io.grpc.examples.CalculatorOuterClass;
 import io.grpc.examples.CalculatorOuterClass.CalculatorRequest;
 import io.grpc.examples.CalculatorOuterClass.CalculatorResponse;
 import io.grpc.inprocess.InProcessChannelBuilder;
@@ -41,10 +42,26 @@ class Calculator {
         final CalculatorRequest request = CalculatorRequest.newBuilder().setNumber1(20).setNumber2(10)
                 .setOperation(CalculatorRequest.OperationType.SUBTRACT).build();
 
+        io.grpc.stub.StreamObserver<io.grpc.examples.CalculatorOuterClass.CalculatorResponse> responseObserver
+                = new StreamObserver<CalculatorResponse>() {
+            @Override
+            public void onNext(CalculatorResponse value) {
+                System.out.println("Succes on next");
+            }
+
+            @Override
+            public void onError(Throwable t) {
+                System.out.println("error");
+            }
+
+            @Override
+            public void onCompleted() {
+                System.out.println("Success on complete");
+            }
+        };
+
         try {
-            final Double answer = calculatorFutureStub.calculate(request).get().getResult();
-            System.out.println("Congratulation!!! It Works.");
-            System.out.println("Answer is : " + answer);
+            asyncStub.calculate(responseObserver).onCompleted();
         } catch (Exception ex) {
             System.out.println("Error" + ex);
         }
