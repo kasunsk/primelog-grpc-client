@@ -28,44 +28,44 @@ class Calculator {
     public static void main(String [] args) {
 
         init();
-        callCalculateService();
-//        try {
-//            calculate();
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
+        //callCalculateService();
+        try {
+            calculate();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void callCalculateService()  {
 
-        final CalculatorFutureStub calculatorFutureStub = CalculatorGrpc.newFutureStub(Optional.ofNullable(channel).orElse(inProcChannel));
-        final CalculatorRequest request = CalculatorRequest.newBuilder().setNumber1(20).setNumber2(10)
-                .setOperation(CalculatorRequest.OperationType.SUBTRACT).build();
-
-        io.grpc.stub.StreamObserver<io.grpc.examples.CalculatorOuterClass.CalculatorResponse> responseObserver
-                = new StreamObserver<CalculatorResponse>() {
-            @Override
-            public void onNext(CalculatorResponse value) {
-                System.out.println("Succes on next");
-            }
-
-            @Override
-            public void onError(Throwable t) {
-                System.out.println("error");
-            }
-
-            @Override
-            public void onCompleted() {
-                System.out.println("Success on complete");
-            }
-        };
-
-        try {
-            asyncStub.calculate(responseObserver).onCompleted();
-        } catch (Exception ex) {
-            System.out.println("Error" + ex);
-        }
-        System.out.println("Something else happening");
+//        final CalculatorFutureStub calculatorFutureStub = CalculatorGrpc.newFutureStub(Optional.ofNullable(channel).orElse(inProcChannel));
+//        final CalculatorRequest request = CalculatorRequest.newBuilder().setNumber1(20).setNumber2(10)
+//                .setOperation(CalculatorRequest.OperationType.SUBTRACT).build();
+//
+//        io.grpc.stub.StreamObserver<io.grpc.examples.CalculatorOuterClass.CalculatorResponse> responseObserver
+//                = new StreamObserver<CalculatorResponse>() {
+//            @Override
+//            public void onNext(CalculatorResponse value) {
+//                System.out.println("Succes on next");
+//            }
+//
+//            @Override
+//            public void onError(Throwable t) {
+//                System.out.println("error");
+//            }
+//
+//            @Override
+//            public void onCompleted() {
+//                System.out.println("Success on complete");
+//            }
+//        };
+//
+//        try {
+//            asyncStub.calculate(request, responseObserver);
+//        } catch (Exception ex) {
+//            System.out.println("Error" + ex);
+//        }
+//        System.out.println("Something else happening");
     }
 
     private static void init() {
@@ -136,7 +136,7 @@ class Calculator {
 
             requestObserver.onCompleted();
 
-            Thread.sleep(20000);
+            //Thread.sleep(20000);
             System.out.println("continue again....");
         } catch (RuntimeException e) {
             requestObserver.onError(e);
