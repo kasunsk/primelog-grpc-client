@@ -1,6 +1,5 @@
 package com.creative.primelog.client.observer;
 
-import io.grpc.examples.CalculatorGrpc;
 import io.grpc.examples.CalculatorOuterClass;
 import io.grpc.stub.StreamObserver;
 

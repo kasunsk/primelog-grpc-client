@@ -38,13 +38,13 @@ class Calculator {
     private static void callCalculateService()  {
 
         final CalculatorFutureStub calculatorFutureStub = CalculatorGrpc.newFutureStub(Optional.ofNullable(channel).orElse(inProcChannel));
-        final CalculatorRequest request = CalculatorRequest.newBuilder().setNumber1(20).setNumber2(15)
+        final CalculatorRequest request = CalculatorRequest.newBuilder().setNumber1(20).setNumber2(10)
                 .setOperation(CalculatorRequest.OperationType.SUBTRACT).build();
 
         try {
-           // final Double answer = calculatorFutureStub.calculate(request).get().getResult();
+            final Double answer = calculatorFutureStub.calculate(request).get().getResult();
             System.out.println("Congratulation!!! It Works.");
-           // System.out.println("Answer is : " + answer);
+            System.out.println("Answer is : " + answer);
         } catch (Exception ex) {
             System.out.println("Error" + ex);
         }
