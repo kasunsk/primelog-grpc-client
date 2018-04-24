@@ -3,32 +3,24 @@ package com.creative.primelog.client.run;
 import com.creative.primelog.client.config.GRpcServerProperties;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import io.grpc.examples.CalculatorGrpc;
-import io.grpc.examples.CalculatorGrpc.CalculatorFutureStub;
-import io.grpc.examples.CalculatorGrpc.CalculatorStub;
-import io.grpc.examples.CalculatorOuterClass;
-import io.grpc.examples.CalculatorOuterClass.CalculatorRequest;
-import io.grpc.examples.CalculatorOuterClass.CalculatorResponse;
+import io.grpc.examples.calculator.CalculatorGrpc;
+import io.grpc.examples.calculator.CalculatorOuterClass;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
-import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 class Calculator {
 
-    static Random random = new Random();
-
     static ManagedChannel channel;
     static ManagedChannel inProcChannel;
-    static CalculatorStub asyncStub;
+    static CalculatorGrpc.CalculatorStub asyncStub;
 
     public static void main(String [] args) {
 
         init();
-        //callCalculateService();
         try {
             calculate();
         } catch (InterruptedException e) {
@@ -73,7 +65,7 @@ class Calculator {
         GRpcServerProperties gRpcServerProperties = new GRpcServerProperties();
 
         if(gRpcServerProperties.isEnabled()) {
-            channel = onChannelBuild(ManagedChannelBuilder.forAddress("localhost", gRpcServerProperties.getPort())
+            channel = onChannelBuild(ManagedChannelBuilder.forAddress("localhost", 9090)
                     .usePlaintext(true)
             ).build();
         }
@@ -104,30 +96,28 @@ class Calculator {
 
         final CountDownLatch finishLatch = new CountDownLatch(1);
 
-        StreamObserver<CalculatorResponse> responseObserver = new StreamObserver<CalculatorResponse>() {
+        StreamObserver<CalculatorOuterClass.CalculatorResponse> responseObserver = new StreamObserver<CalculatorOuterClass.CalculatorResponse>() {
 
             @Override
-            public void onNext(CalculatorResponse value) {
+            public void onNext(CalculatorOuterClass.CalculatorResponse value) {
                 System.out.println("Result is " +  value.getResult());
             }
 
             @Override
             public void onError(Throwable t) {
                 System.out.println("Response Observer : Error" + t);
-                finishLatch.countDown();
             }
 
             @Override
             public void onCompleted() {
                 System.out.println("Completed");
-                finishLatch.countDown();
             }
         };
 
-        final CalculatorRequest request = CalculatorRequest.newBuilder().setNumber1(30)
-                .setNumber2(15).setOperation(CalculatorRequest.OperationType.SUBTRACT).build();
+        final CalculatorOuterClass.CalculatorRequest request = CalculatorOuterClass.CalculatorRequest.newBuilder().setNumber1(30)
+                .setNumber2(15).setOperation(CalculatorOuterClass.CalculatorRequest.OperationType.SUBTRACT).build();
 
-        StreamObserver<CalculatorRequest> requestObserver = asyncStub.calculate(responseObserver);
+        StreamObserver<CalculatorOuterClass.CalculatorRequest> requestObserver = asyncStub.calculate(responseObserver);
 
         try {
             System.out.println("Processing ");

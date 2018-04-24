@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option java_package = "io.grpc.examples";
+
+package helloworld;
+
+service Invoice {
+    rpc issueInvoice(InvoiceRequest) returns (InvoiceResponse) {}
+
+}
+
+
+message InvoiceRequest {
+    string invoiceid = 1;
+}
+
+message InvoiceResponse {
+    string invoicename = 1;
+}

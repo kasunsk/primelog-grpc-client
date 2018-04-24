@@ -2,7 +2,7 @@ package com.creative.primelog.client.config;
 
 public class GRpcServerProperties {
 
-    private int port = 6565;
+    private int port = 9090;
 
 
     /**
