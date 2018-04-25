@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package com.primelog.cirrus.common;
+
+option java_package = "com.primelog.cirrus.common.backend.protoGen";
+option java_outer_classname = "CommonDataProto";
+
+service CommonService {
+    rpc getCurrencies(CurrencyRequest) returns (CurrencyResponse) {}
+}
+
+message CurrencyRequest {
+    string authenticationTicket = 1;
+}
+
+message CurrencyResponse {
+    repeated CurrencyType currencyTypes = 1;
+}
+
+message CurrencyType {
+    string code = 1;
+    string description = 2;
+    string sortingGroup = 3;
+}

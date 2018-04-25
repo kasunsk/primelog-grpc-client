@@ -12,7 +12,7 @@ import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-class Calculator {
+class CalculatorClient {
 
     static ManagedChannel channel;
     static ManagedChannel inProcChannel;

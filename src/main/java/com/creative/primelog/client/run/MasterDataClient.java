@@ -7,18 +7,18 @@ import io.grpc.StatusRuntimeException;
 import com.primelog.cirrus.masterdata.frontend.protoGen.masterDataServiceGrpc;
 import java.util.concurrent.TimeUnit;
 
-public class MasterDataRun {
+public class MasterDataClient {
 
     private final ManagedChannel channel;
     private final masterDataServiceGrpc.masterDataServiceBlockingStub blockingStub;
 
-    public MasterDataRun(String host, int port) {
+    public MasterDataClient(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext(true)
                 .build());
     }
 
-    public MasterDataRun(ManagedChannel channel) {
+    public MasterDataClient(ManagedChannel channel) {
         this.channel = channel;
         blockingStub = masterDataServiceGrpc.newBlockingStub(channel);
     }
@@ -58,7 +58,7 @@ public class MasterDataRun {
 
     public static void main(String [] args) throws InterruptedException {
 
-        MasterDataRun client = new MasterDataRun("localhost", 9090);
+        MasterDataClient client = new MasterDataClient("localhost", 9090);
 
         try {
             client.printMasterDataVersion();

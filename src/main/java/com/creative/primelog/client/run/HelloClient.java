@@ -8,13 +8,13 @@ import io.grpc.examples.greeter.GreeterOuterClass;
 
 import java.util.concurrent.TimeUnit;
 
-class Hello {
+class HelloClient {
 
 
     private final ManagedChannel channel;
     private final GreeterGrpc.GreeterBlockingStub blockingStub;
 
-    public Hello(String host, int port) {
+    public HelloClient(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port)
                 // Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
                 // needing certificates.
@@ -22,13 +22,13 @@ class Hello {
                 .build());
     }
 
-    public Hello(ManagedChannel channel) {
+    public HelloClient(ManagedChannel channel) {
         this.channel = channel;
         blockingStub = GreeterGrpc.newBlockingStub(channel);
     }
 
     public static void main(String[] args) throws Exception {
-        Hello client = new Hello("localhost", 9090);
+        HelloClient client = new HelloClient("localhost", 9090);
         try {
       /* Access a service running on the local machine on port 6565 */
             String user = "world";

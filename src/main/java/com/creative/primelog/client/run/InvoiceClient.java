@@ -8,12 +8,12 @@ import io.grpc.examples.InvoiceOuterClass;
 
 import java.util.concurrent.TimeUnit;
 
-public class InvoiceRun {
+public class InvoiceClient {
 
     private final ManagedChannel channel;
     private final InvoiceGrpc.InvoiceBlockingStub blockingStub;
 
-    public InvoiceRun(String host, int port) {
+    public InvoiceClient(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port)
                 // Channels are secure by default (via SSL/TLS). For the example we disable TLS to avoid
                 // needing certificates.
@@ -21,7 +21,7 @@ public class InvoiceRun {
                 .build());
     }
 
-    public InvoiceRun(ManagedChannel channel) {
+    public InvoiceClient(ManagedChannel channel) {
         this.channel = channel;
         blockingStub = InvoiceGrpc.newBlockingStub(channel);
     }
@@ -45,7 +45,7 @@ public class InvoiceRun {
 
     public static void main(String [] args) throws InterruptedException {
 
-        InvoiceRun client = new InvoiceRun("localhost", 6565);
+        InvoiceClient client = new InvoiceClient("localhost", 6565);
 
         try {
             client.issueInvoice();

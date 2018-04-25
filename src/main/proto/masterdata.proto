@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package proto;
+package com.primelog.cirrus.masterdata;
 
 option java_package = "com.primelog.cirrus.masterdata.frontend.protoGen";
 option java_outer_classname = "MasterDataProto";
