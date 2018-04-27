@@ -9,6 +9,8 @@ import java.util.concurrent.TimeUnit;
 
 public class MasterDataClient {
 
+    public static final String AUTH_TICKET = "qKuYFpRS2xM_sMHXUbVFf0t4tJ2ZZ21A4uYGoc32_0Xs1OrugoltDvnKs5ermtdLbaJj5pM0ZS9Ui0oDOW2EbjJ0w3OHd_c5boekmWQ8svp82YiyntRfA41TWePUZ_DS";
+
     private final ManagedChannel channel;
     private final masterDataServiceGrpc.masterDataServiceBlockingStub blockingStub;
 
@@ -29,7 +31,7 @@ public class MasterDataClient {
 
     private void getCountryOptions() {
         System.out.println("Will get country option " + " ...");
-        MasterDataProto.CountryOptionRequest request = MasterDataProto.CountryOptionRequest.newBuilder().setAuthenticationTicket("qKuYFpRS2xM_sMHXUbVFf0t4tJ2ZZ21A4uYGoc32_0Xs1OrugoltDvnKs5ermtdLbaJj5pM0ZS9Ui0oDOW2EbqR-YuLaV0X5IzEXo3iqFeN82YiyntRfA41TWePUZ_DS").build();
+        MasterDataProto.CountryOptionRequest request = MasterDataProto.CountryOptionRequest.newBuilder().setAuthenticationTicket(AUTH_TICKET).build();
         MasterDataProto.CountryOptionResponse response;
         try {
             response = blockingStub.getCountryOptions(request);
@@ -62,7 +64,7 @@ public class MasterDataClient {
 
         try {
             client.printMasterDataVersion();
-            client.getCountryOptions();
+            //client.getCountryOptions();
         } finally {
             client.shutdown();
         }
