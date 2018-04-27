@@ -83,4 +83,8 @@ task cleanProtoGen{
         delete("$projectDir/src/main/protoGen")
     }
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.2' //version required
+}
 clean.dependsOn cleanProtoGen
