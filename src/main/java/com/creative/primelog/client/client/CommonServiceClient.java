@@ -1,4 +1,4 @@
-package com.creative.primelog.client.run;
+package com.creative.primelog.client.client;
 
 import com.primelog.cirrus.common.backend.protoGen.CommonDataProto;
 import com.primelog.cirrus.common.backend.protoGen.CommonServiceGrpc;
@@ -8,7 +8,7 @@ import io.grpc.StatusRuntimeException;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.creative.primelog.client.run.MasterDataClient.AUTH_TICKET;
+import static com.creative.primelog.client.client.MasterDataClient.AUTH_TICKET;
 
 public class CommonServiceClient {
 
@@ -19,6 +19,7 @@ public class CommonServiceClient {
         this(ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext(true)
                 .build());
+        System.out.println("Grpc host : " + host + " port : " + port);
     }
 
     public CommonServiceClient(ManagedChannel channel) {
@@ -28,6 +29,17 @@ public class CommonServiceClient {
 
     public void shutdown() throws InterruptedException {
         channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+    }
+
+    public static void run(String localhost, int port) throws InterruptedException {
+
+        CommonServiceClient client = new CommonServiceClient(localhost, port);
+
+        try {
+            client.getCurrencies();
+        } finally {
+            client.shutdown();
+        }
     }
 
     public static void main(String [] args) throws InterruptedException {

@@ -1,4 +1,4 @@
-package com.creative.primelog.client.run;
+package com.creative.primelog.client.client;
 
 import com.creative.primelog.client.config.GRpcServerProperties;
 import io.grpc.ManagedChannel;
@@ -8,7 +8,6 @@ import io.grpc.examples.calculator.CalculatorOuterClass;
 import io.grpc.inprocess.InProcessChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
-import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 

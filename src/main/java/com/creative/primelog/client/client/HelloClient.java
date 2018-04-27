@@ -1,4 +1,4 @@
-package com.creative.primelog.client.run;
+package com.creative.primelog.client.client;
 
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;

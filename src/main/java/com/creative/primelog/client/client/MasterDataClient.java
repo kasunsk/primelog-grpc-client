@@ -1,4 +1,4 @@
-package com.creative.primelog.client.run;
+package com.creative.primelog.client.client;
 
 import com.primelog.cirrus.masterdata.frontend.protoGen.MasterDataProto;
 import io.grpc.ManagedChannel;
@@ -18,6 +18,7 @@ public class MasterDataClient {
         this(ManagedChannelBuilder.forAddress(host, port)
                 .usePlaintext(true)
                 .build());
+        System.out.println("Grpc host : " + host + " port : " + port);
     }
 
     public MasterDataClient(ManagedChannel channel) {
@@ -58,13 +59,25 @@ public class MasterDataClient {
         System.out.println("Master data version : " + response.getVersion());
     }
 
+    public static void run(String host, int port) throws InterruptedException {
+
+        MasterDataClient client = new MasterDataClient(host, port);
+
+        try {
+            client.printMasterDataVersion();
+            client.getCountryOptions();
+        } finally {
+            client.shutdown();
+        }
+    }
+
     public static void main(String [] args) throws InterruptedException {
 
         MasterDataClient client = new MasterDataClient("localhost", 9090);
 
         try {
             client.printMasterDataVersion();
-            //client.getCountryOptions();
+            client.getCountryOptions();
         } finally {
             client.shutdown();
         }
