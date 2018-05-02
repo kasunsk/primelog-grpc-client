@@ -13,6 +13,9 @@ repositories {
 
 jar {
     manifest.attributes("Main-Class": "com.creative.primelog.client.client.MainClass")
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
 }
 
 buildscript {

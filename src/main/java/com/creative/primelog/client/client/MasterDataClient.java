@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 public class MasterDataClient {
 
-    public static final String AUTH_TICKET = "qKuYFpRS2xM_sMHXUbVFf0t4tJ2ZZ21A4uYGoc32_0Xs1OrugoltDvnKs5ermtdLbaJj5pM0ZS9Ui0oDOW2EbjJ0w3OHd_c5boekmWQ8svp82YiyntRfA41TWePUZ_DS";
+    public static final String AUTH_TICKET = "5cxuqKBHh8sxGuq4K68WWFbO8AIkJVqrHUzBXI-n1I-3K05oQ1wSCU4jDV9WNraG_Q2tLGC_87sZCL91de5l5A";
 
     private final ManagedChannel channel;
     private final masterDataServiceGrpc.masterDataServiceBlockingStub blockingStub;
@@ -73,12 +73,14 @@ public class MasterDataClient {
 
     public static void main(String [] args) throws InterruptedException {
 
-        MasterDataClient client = new MasterDataClient("localhost", 9090);
+        MasterDataClient client = new MasterDataClient("localhost", 6565);
 
         try {
             client.printMasterDataVersion();
             client.getCountryOptions();
-        } finally {
+        } catch (Exception ex) {
+            System.err.println("Unable to retrieve data " + ex.getMessage());
+        }finally {
             client.shutdown();
         }
     }
