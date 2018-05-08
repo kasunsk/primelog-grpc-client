@@ -66,6 +66,7 @@ public class CommonServiceClient {
             return;
         }
         System.out.println("Currencies Result : " + response.getCurrencyTypesList());
-
+        System.out.println();
+        System.out.println("Success : getCurrencies from Common Service");
     }
 }

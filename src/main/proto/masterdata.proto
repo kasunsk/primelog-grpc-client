@@ -5,7 +5,7 @@ package com.primelog.cirrus.masterdata;
 option java_package = "com.primelog.cirrus.masterdata.frontend.protoGen";
 option java_outer_classname = "MasterDataProto";
 
-service masterDataService {
+service MasterDataService {
     rpc getCountryOptions(CountryOptionRequest) returns (CountryOptionResponse) {}
     rpc getVersion(VersionRequest) returns (VersionResponse) {}
 }

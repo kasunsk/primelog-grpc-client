@@ -4,7 +4,7 @@ import com.primelog.cirrus.masterdata.frontend.protoGen.MasterDataProto;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import io.grpc.StatusRuntimeException;
-import com.primelog.cirrus.masterdata.frontend.protoGen.masterDataServiceGrpc;
+import com.primelog.cirrus.masterdata.frontend.protoGen.MasterDataServiceGrpc;
 import java.util.concurrent.TimeUnit;
 
 public class MasterDataClient {
@@ -12,7 +12,7 @@ public class MasterDataClient {
     public static final String AUTH_TICKET = "5cxuqKBHh8sxGuq4K68WWFbO8AIkJVqrHUzBXI-n1I-3K05oQ1wSCU4jDV9WNraG_Q2tLGC_87sZCL91de5l5A";
 
     private final ManagedChannel channel;
-    private final masterDataServiceGrpc.masterDataServiceBlockingStub blockingStub;
+    private final MasterDataServiceGrpc.MasterDataServiceBlockingStub blockingStub;
 
     public MasterDataClient(String host, int port) {
         this(ManagedChannelBuilder.forAddress(host, port)
@@ -23,7 +23,7 @@ public class MasterDataClient {
 
     public MasterDataClient(ManagedChannel channel) {
         this.channel = channel;
-        blockingStub = masterDataServiceGrpc.newBlockingStub(channel);
+        blockingStub = MasterDataServiceGrpc.newBlockingStub(channel);
     }
 
     public void shutdown() throws InterruptedException {
@@ -65,7 +65,14 @@ public class MasterDataClient {
 
         try {
             client.printMasterDataVersion();
+            System.out.println();
+            System.out.println("Success : getVersion from Master Data Service");
+            System.out.println();
+
             client.getCountryOptions();
+
+            System.out.println();
+            System.out.println("Success : getCountryOptions from Master Data Service");
         } finally {
             client.shutdown();
         }
@@ -73,7 +80,7 @@ public class MasterDataClient {
 
     public static void main(String [] args) throws InterruptedException {
 
-        MasterDataClient client = new MasterDataClient("localhost", 6565);
+        MasterDataClient client = new MasterDataClient("localhost", 9090);
 
         try {
             client.printMasterDataVersion();
