@@ -18,7 +18,6 @@ message VersionResponse {
 }
 
 message CountryOptionRequest {
-    string authenticationTicket = 1;
 }
 
 message CountryOptionResponse {

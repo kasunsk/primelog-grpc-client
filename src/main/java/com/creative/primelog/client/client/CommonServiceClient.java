@@ -1,10 +1,10 @@
 package com.creative.primelog.client.client;
 
+import com.creative.primelog.client.interceptor.HeaderClientInterceptor;
 import com.primelog.cirrus.common.backend.protoGen.CommonDataProto;
 import com.primelog.cirrus.common.backend.protoGen.CommonServiceGrpc;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.StatusRuntimeException;
+import com.primelog.cirrus.masterdata.frontend.protoGen.MasterDataServiceGrpc;
+import io.grpc.*;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,23 +12,22 @@ import static com.creative.primelog.client.client.MasterDataClient.AUTH_TICKET;
 
 public class CommonServiceClient {
 
-    private final ManagedChannel channel;
+    private final ManagedChannel originChannel;
     private final CommonServiceGrpc.CommonServiceBlockingStub blockingStub;
 
     public CommonServiceClient(String host, int port) {
-        this(ManagedChannelBuilder.forAddress(host, port)
-                .usePlaintext(true)
-                .build());
+        System.out.println("Grpc host : " + host + " port : " + port);
+
+        originChannel = ManagedChannelBuilder.forAddress(host, port).usePlaintext(true).build();
+        ClientInterceptor interceptor = new HeaderClientInterceptor();
+        Channel channel = ClientInterceptors.intercept(originChannel, interceptor);
+        blockingStub = CommonServiceGrpc.newBlockingStub(channel);
         System.out.println("Grpc host : " + host + " port : " + port);
     }
 
-    public CommonServiceClient(ManagedChannel channel) {
-        this.channel = channel;
-        blockingStub = CommonServiceGrpc.newBlockingStub(channel);
-    }
 
     public void shutdown() throws InterruptedException {
-        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+        originChannel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
     public static void run(String localhost, int port) throws InterruptedException {
@@ -44,7 +43,7 @@ public class CommonServiceClient {
 
     public static void main(String [] args) throws InterruptedException {
 
-        CommonServiceClient client = new CommonServiceClient("localhost", 9090);
+        CommonServiceClient client = new CommonServiceClient("localhost", 7575);
 
         try {
             client.getCurrencies();
@@ -56,7 +55,7 @@ public class CommonServiceClient {
     public void getCurrencies() {
         System.out.println("Looking for currencies from common web service");
         CommonDataProto.CurrencyRequest request = CommonDataProto.CurrencyRequest.newBuilder()
-                .setAuthenticationTicket(AUTH_TICKET).build();
+                .build();
         CommonDataProto.CurrencyResponse response;
 
         try {

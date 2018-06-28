@@ -1,38 +1,35 @@
 package com.creative.primelog.client.client;
 
+import com.creative.primelog.client.interceptor.HeaderClientInterceptor;
 import com.primelog.cirrus.masterdata.frontend.protoGen.MasterDataProto;
-import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.StatusRuntimeException;
+import io.grpc.*;
 import com.primelog.cirrus.masterdata.frontend.protoGen.MasterDataServiceGrpc;
 import java.util.concurrent.TimeUnit;
 
 public class MasterDataClient {
 
-    public static final String AUTH_TICKET = "5cxuqKBHh8sxGuq4K68WWFbO8AIkJVqrHUzBXI-n1I-3K05oQ1wSCU4jDV9WNraG_Q2tLGC_87sZCL91de5l5A";
+    public static final String AUTH_TICKET =
+//"5cxuqKBHh8sxGuq4K68WWFbO8AIkJVqrHUzBXI-n1I-fVGlPaxho7d1ukFptgwyFDUk--tJIru2nXKhfAw8qyw";
+    "5cxuqKBHh8sxGuq4K68WWFbO8AIkJVqrHUzBXI-n1I-fVGlPaxho7d1ukFptgwyFDUk--tJIru2nXKhfAw8qyw";
 
-    private final ManagedChannel channel;
-    private final MasterDataServiceGrpc.MasterDataServiceBlockingStub blockingStub;
+        private final ManagedChannel originChannel;
+        private final MasterDataServiceGrpc.MasterDataServiceBlockingStub blockingStub;
 
     public MasterDataClient(String host, int port) {
-        this(ManagedChannelBuilder.forAddress(host, port)
-                .usePlaintext(true)
-                .build());
+        originChannel = ManagedChannelBuilder.forAddress(host, port).usePlaintext(true).build();
+        ClientInterceptor interceptor = new HeaderClientInterceptor();
+        Channel channel = ClientInterceptors.intercept(originChannel, interceptor);
+        blockingStub = MasterDataServiceGrpc.newBlockingStub(channel);
         System.out.println("Grpc host : " + host + " port : " + port);
     }
 
-    public MasterDataClient(ManagedChannel channel) {
-        this.channel = channel;
-        blockingStub = MasterDataServiceGrpc.newBlockingStub(channel);
-    }
-
     public void shutdown() throws InterruptedException {
-        channel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
+        originChannel.shutdown().awaitTermination(5, TimeUnit.SECONDS);
     }
 
     private void getCountryOptions() {
         System.out.println("Will get country option " + " ...");
-        MasterDataProto.CountryOptionRequest request = MasterDataProto.CountryOptionRequest.newBuilder().setAuthenticationTicket(AUTH_TICKET).build();
+        MasterDataProto.CountryOptionRequest request = MasterDataProto.CountryOptionRequest.newBuilder().build();
         MasterDataProto.CountryOptionResponse response;
         try {
             response = blockingStub.getCountryOptions(request);
@@ -80,7 +77,7 @@ public class MasterDataClient {
 
     public static void main(String [] args) throws InterruptedException {
 
-        MasterDataClient client = new MasterDataClient("localhost", 9090);
+        MasterDataClient client = new MasterDataClient("localhost", 6565);
 
         try {
             client.printMasterDataVersion();

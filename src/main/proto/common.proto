@@ -10,7 +10,6 @@ service CommonService {
 }
 
 message CurrencyRequest {
-    string authenticationTicket = 1;
 }
 
 message CurrencyResponse {
